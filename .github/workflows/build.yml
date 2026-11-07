@@ -32,9 +32,18 @@ jobs:
       - name: Android Platform 35
         shell: bash
         run: |
-          sdkmanager --version
-          sdkmanager --licenses < <(yes) >/dev/null || true
-          sdkmanager "platforms;android-35" "build-tools;35.0.0"
+          set -euo pipefail
+          echo "ANDROID_HOME=${ANDROID_HOME:-unset}"
+          ls "${ANDROID_HOME}/platforms" || true
+          ls "${ANDROID_HOME}/build-tools" || true
+          SDK_MANAGER=$(find "${ANDROID_HOME}/cmdline-tools" -type f -name sdkmanager 2>/dev/null | head -n 1 || true)
+          if [[ -n "$SDK_MANAGER" ]]; then
+            "$SDK_MANAGER" "platforms;android-35" "build-tools;35.0.0"
+          else
+            echo "sdkmanager non presente; verifico SDK preinstallato"
+            test -f "${ANDROID_HOME}/platforms/android-35/android.jar"
+            test -d "${ANDROID_HOME}/build-tools/35.0.0"
+          fi
 
       - name: Estrai automaticamente lo ZIP caricato (metodo Possy)
         shell: bash
