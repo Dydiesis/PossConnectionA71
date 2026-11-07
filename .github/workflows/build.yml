@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'PossWake_*.zip'
+      - '.github/workflows/build.yml'
   workflow_dispatch:
 
 permissions:
@@ -28,11 +29,12 @@ jobs:
         with:
           gradle-version: '8.10.2'
 
-      - name: Prepara Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Android Platform 35
-        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+        shell: bash
+        run: |
+          sdkmanager --version
+          sdkmanager --licenses < <(yes) >/dev/null || true
+          sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
       - name: Estrai automaticamente lo ZIP caricato (metodo Possy)
         shell: bash
