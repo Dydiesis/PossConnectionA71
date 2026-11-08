@@ -76,11 +76,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cp "$SRC_DIR/app/build/outputs/apk/debug/app-debug.apk" "PossWake_A71_v2.apk"
+          cp "$SRC_DIR/app/build/outputs/apk/debug/app-debug.apk" "PossConnectionA71.apk"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "PossWake_A71_v2.apk"
+          git add "PossConnectionA71.apk"
+          git rm -f "PossWake_A71_v2.apk" 2>/dev/null || true
           if ! git diff --cached --quiet; then
-            git commit -m "Pubblica APK v2 scaricabile direttamente [skip ci]"
+            git commit -m "Pubblica PossConnectionA71 APK scaricabile direttamente [skip ci]"
             git push origin HEAD:main
           fi
